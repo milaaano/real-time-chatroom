@@ -15,6 +15,18 @@ const server = http.createServer((req, res) => {
             }
         });
     }
+
+    if (req.url === '/style.css') {
+        fs.readFile(__dirname + '/style.css', (err, css) => {
+            if (err) {
+                res.writeHead(500);
+                return res.end('Error loading style.css');
+            }
+            res.writeHead(200, { 'Content-Type': 'text/css' });
+            res.end(css);
+        });
+    }
+
 });
 
 const io = require('socket.io')(server);
