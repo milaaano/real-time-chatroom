@@ -1,3 +1,5 @@
+@import "message.css";
+
 body {
     background-color: rgb(215, 214, 214);
     margin: 0;
@@ -55,11 +57,6 @@ body {
     overflow-y: scroll;
 }
 
-.message {
+/* .message {
     margin-bottom: 5px;
-}
-
-.username {
-    font-weight: bold;
-    color: skyblue;
-}
+} */

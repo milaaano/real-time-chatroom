@@ -31,25 +31,35 @@
         form.addEventListener('submit', (e) => {
             e.preventDefault();
 
-            if (message.value) {
-                socket.emit('send name', myname.value);
-                socket.emit('send message', message.value);
+            if (message.value && myname.value) {
+                console.log(myname.value + message.value);
+                socket.emit('send message', { name: myname.value, message: message.value });
                 message.value = '';
             }
         });
 
-        socket.on('send name', (username) => {
-            let name = document.createElement('p');
-            name.classList.add('message');
-            name.innerHTML = `<span class="username">${username}:</span>`;
-            messageArea.appendChild(name);
+        const postMessage = function({name, message, timestamp}) {
+            let msg = document.createElement('div');
+            msg.classList.add('message-blue');
+
+            const ts = (timestamp instanceof Date) ? timestamp : new Date(timestamp);
+            msg.innerHTML = `
+                <p class="username">${name}</p>
+                <p class="message-content">${message}</p>
+                <p class="message-timestamp-right">${ts.getHours()}:${ts.getMinutes()}</p>
+            `;
+
+            messageArea.appendChild(msg);
+        };
+
+        socket.on('send history', (chat_history) => {
+            chat_history.forEach(element => {
+                postMessage(element);
+            });
         });
 
-        socket.on('send message', (chat) => {
-            let chatContent = document.createElement('p');
-            chatContent.classList.add('message');
-            chatContent.textContent = chat;
-            messageArea.appendChild(chatContent);
+        socket.on('send message', (msg) => {
+            postMessage(msg);
         });
     </script>
 </body>
