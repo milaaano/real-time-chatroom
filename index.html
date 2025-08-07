@@ -33,20 +33,24 @@
 
             if (message.value && myname.value) {
                 console.log(myname.value + message.value);
-                socket.emit('send message', { name: myname.value, message: message.value });
+                socket.emit('send message', { name: myname.value, message: message.value, id: socket.id });
                 message.value = '';
             }
         });
 
-        const postMessage = function({name, message, timestamp}) {
+        const postMessage = function({name, message, timestamp, id}) {
             let msg = document.createElement('div');
-            msg.classList.add('message-blue');
 
             const ts = (timestamp instanceof Date) ? timestamp : new Date(timestamp);
+            if (socket.id === id) {
+                msg.classList.add('message-my');
+            } else {
+                msg.classList.add('message-others');
+            }
             msg.innerHTML = `
                 <p class="username">${name}</p>
                 <p class="message-content">${message}</p>
-                <p class="message-timestamp-right">${ts.getHours()}:${ts.getMinutes()}</p>
+                <p class="message-timestamp-right">${String(ts.getHours()).padStart(2, '0')}:${String(ts.getMinutes()).padStart(2, '0')}</p>
             `;
 
             messageArea.appendChild(msg);

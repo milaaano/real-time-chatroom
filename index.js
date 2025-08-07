@@ -45,7 +45,7 @@ io.on('connection', (socket) => {
     socket.emit('send history', chat_history);
 
     socket.on('send message', (msg) => {;
-        const entry = {name: msg.name, message: msg.message, timestamp: new Date() };
+        const entry = {name: msg.name, message: msg.message, timestamp: new Date(), id: socket.id };
         chat_history.push(entry);
         io.emit('send message', entry);
     });
