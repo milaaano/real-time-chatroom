@@ -32,17 +32,17 @@
             e.preventDefault();
 
             if (message.value && myname.value) {
-                console.log(myname.value + message.value);
-                socket.emit('send message', { name: myname.value, message: message.value, id: socket.id });
+                console.log(myname.value + ' ' + message.value);
+                socket.emit('send message', { name: myname.value, message: message.value, socket_id: socket.id });
                 message.value = '';
             }
         });
 
-        const postMessage = function({name, message, timestamp, id}) {
+        const postMessage = function({name, message, timestamp, socket_id}) {
             let msg = document.createElement('div');
 
             const ts = (timestamp instanceof Date) ? timestamp : new Date(timestamp);
-            if (socket.id === id) {
+            if (socket.id === socket_id) {
                 msg.classList.add('message-my');
             } else {
                 msg.classList.add('message-others');
